@@ -1,40 +1,15 @@
 #!/snap/bin/pwsh
 
-# configuration: set default location
-# az configure --default location=eastus
-
-# to file
-# create resource group and save output to JSON file
-# az group create -n paul-cli-scripting-rg2 | Set-Content resourceGroup.json
-
-# to var
-# $rg = az group create -n paul-cli-scripting-rg | ConvertTo-Json
-
-# az configure --default group=$rg.name
-
-# $ImageURN="$(az vm image list --query "[? contains(urn, 'Ubuntu')] | [0].urn")"
-
-# to file
-# az vm create -n paul-linux-vm --size "Standard_B2s" --image "$ImageURN" --admin-username "student" --assign-identity | Set-Content virtual_machine.json
-
-# to var
-# $vm = az vm create -n paul-linux-vm --size "Standard_B2s" --image "$ImageURN" --admin-username "student" --assign-identity | ConvertTo-Json
-
-# az vm run-command invoke -n $vm.name --command-id RunBashScript setup-and-deploy.sh
-
-
-
-
 # --- start ---
 
 # variables
 
-$rgName = "paul-cli-scripting-rg"
-$vmName = "paul-cli-scripting-vm"
+$rgName = "final-paul-cli-scripting-rg"
+$vmName = "final-paul-cli-scripting-vm"
 $vmSize = "Standard_B2s"
 $vmImage = "$(az vm image list --query "[? contains(urn, 'Ubuntu')] | [0].urn")"
 $vmAdminUsername = "student"
-$kvName = "paul-cli-scripting-kv"
+$kvName = "final-paul-cli-scripting-kv"
 $kvSecretName = "ConnectionStrings--Default"
 $kvSecretValue = "server=localhost;port=3306;database=coding_events;user=coding_events;password=launchcode"
 
@@ -74,7 +49,7 @@ az keyvault secret set --vault-name "$kvName" --description "connection string" 
 
 # VM open NSGs
 
-az vm open-port --port 80
+az vm open-port --port 443
 
 # VM: grant access to KV
 

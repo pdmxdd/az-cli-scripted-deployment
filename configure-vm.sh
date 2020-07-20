@@ -4,13 +4,15 @@ set -ex
 
 # -- env vars --
 
+export DEBIAN_FRONTEND=noninteractive
+
 # -- end env vars --
 
 # dotnet dependencies
 
 wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 
-DEBIAN_FRONTEND=noninteractive dpkg -i packages-microsoft-prod.deb
+dpkg -i packages-microsoft-prod.deb
 
 apt-get update && \
 apt-get install -y apt-transport-https && \
@@ -21,15 +23,14 @@ apt-get install -y dotnet-sdk-3.1
 
 wget https://dev.mysql.com/get/mysql-apt-config_0.8.15-1_all.deb
 
-DEBIAN_FRONTEND=noninteractive dpkg -i mysql-apt-config_0.8.15-1_all.deb
+dpkg -i mysql-apt-config_0.8.15-1_all.deb
 
 # set environment variables that are necessary for MySQL installation
 debconf-set-selections <<< "mysql-community-server mysql-community-server/root-pass password lc-password"
 debconf-set-selections <<< "mysql-community-server mysql-community-server/re-root-pass password lc-password"
 
 # install MySQL in a noninteractive way since the environment variables set the necessary information for setup
-apt-get update
-DEBIAN_FRONTEND=noninteractive apt-get install mysql-server -y
+apt-get update && apt-get install mysql-server -y
 
 ### MySQL section START ###
 

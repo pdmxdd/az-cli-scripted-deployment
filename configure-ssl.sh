@@ -4,7 +4,7 @@ set -ex
 
 # -- env vars --
 
-DEBIAN_FRONTEND=noninteractive
+export DEBIAN_FRONTEND=noninteractive
 HOME=/home/student
 
 # nginx
@@ -16,14 +16,14 @@ tls_cert_path="${nginx_ssl_dir}/cert.pem"
 
 # -- install dependencies --
 
-DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install nginx -y
+apt-get update && apt-get install nginx -y
 
 # -- end install dependencies --
 
 # -- generate self signed cert --
 
 # create random generator file
-# touch /tmp/.rnd
+touch /tmp/.rnd
 
 # create certs dir
 mkdir "$nginx_ssl_dir"
@@ -32,21 +32,22 @@ openssl req -x509 -newkey rsa:4086 \
 -subj "/C=US/ST=Missouri/L=St. Louis/O=The LaunchCode Foundation/CN=localhost" \
 -keyout "$tls_key_path" \
 -out "$tls_cert_path" \
--days 3650 -nodes -sha256 # \
-# -rand /tmp/.rnd
+-days 3650 -nodes -sha256 \
+-rand /tmp/.rnd
 
 # -- end self signed cert --
 
 # -- configure nginx --
 
 cat << EOF > /etc/nginx/nginx.conf
+events {}
 http {
   # proxy settings
   proxy_redirect          off;
-  proxy_set_header        Host $host;
-  proxy_set_header        X-Real-IP $remote_addr;
-  proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-  proxy_set_header        X-Forwarded-Proto $scheme;
+  proxy_set_header        Host \$host;
+  proxy_set_header        X-Real-IP \$remote_addr;
+  proxy_set_header        X-Forwarded-For \$proxy_add_x_forwarded_for;
+  proxy_set_header        X-Forwarded-Proto \$scheme;
   client_max_body_size    10m;
   client_body_buffer_size 128k;
   proxy_connect_timeout   90;
@@ -54,7 +55,7 @@ http {
   proxy_read_timeout      90;
   proxy_buffers           32 4k;
 
-  limit_req_zone $binary_remote_addr zone=one:10m rate=5r/s;
+  limit_req_zone \$binary_remote_addr zone=one:10m rate=5r/s;
   server_tokens  off;
 
   sendfile on;
@@ -68,14 +69,14 @@ http {
   server {
     listen     *:80;
     add_header Strict-Transport-Security max-age=15768000;
-    return     301 https://$host$request_uri;
+    return     301 https://\$host\$request_uri;
   }
 
   server {
     listen                    *:443 ssl;
     server_name               codeeventsapi.com;
-    ssl_certificate           $tls_key_path;
-    ssl_certificate_key       $tls_cert_path;
+    ssl_certificate           $tls_cert_path;
+    ssl_certificate_key       $tls_key_path;
     ssl_protocols             TLSv1.1 TLSv1.2;
     ssl_prefer_server_ciphers on;
     ssl_ciphers               "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";

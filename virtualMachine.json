@@ -1,0 +1,15 @@
+{
+  "fqdns": "",
+  "id": "/subscriptions/484166ab-b42b-4c72-a684-a5f7f1540e80/resourceGroups/final-paul-cli-scripting-rg/providers/Microsoft.Compute/virtualMachines/final-paul-cli-scripting-vm",
+  "identity": {
+    "systemAssignedIdentity": "3a616144-de6c-442e-b159-af2c7afbca4a",
+    "userAssignedIdentities": {}
+  },
+  "location": "eastus",
+  "macAddress": "00-0D-3A-8B-2D-A2",
+  "powerState": "VM running",
+  "privateIpAddress": "10.0.0.4",
+  "publicIpAddress": "168.62.165.87",
+  "resourceGroup": "final-paul-cli-scripting-rg",
+  "zones": ""
+}
