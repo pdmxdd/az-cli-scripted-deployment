@@ -4,12 +4,13 @@
 
 # variables
 
-$rgName = "final-paul-cli-scripting-rg"
-$vmName = "final-paul-cli-scripting-vm"
+$studentName = "paul"
+$rgName = "$studentName-cli-deploy-rg"
+$vmName = "$studentName-cli-deploy-vm"
 $vmSize = "Standard_B2s"
 $vmImage = "$(az vm image list --query "[? contains(urn, 'Ubuntu')] | [0].urn")"
 $vmAdminUsername = "student"
-$kvName = "final-paul-cli-scripting-kv"
+$kvName = "$studentName-cli-deploy-kv"
 $kvSecretName = "ConnectionStrings--Default"
 $kvSecretValue = "server=localhost;port=3306;database=coding_events;user=coding_events;password=launchcode"
 
@@ -27,7 +28,7 @@ az configure --default group=$rgName
 
 # VM: provision
 
-az vm create -n "$vmName" --size "$vmSize" --image "$vmImage" --admin-username "$vmAdminUsername" --assign-identity | Set-Content virtualMachine.json
+az vm create -n "$vmName" --size "$vmSize" --image "$vmImage" --admin-username "$vmAdminUsername" --admin-password "LaunchCode-@zure1" --authentication-type "password" --assign-identity | Set-Content virtualMachine.json
 
 # set az vm default
 
@@ -36,10 +37,6 @@ az configure --default vm=$vmName
 # KV: provision
 
 az keyvault create -n "$kvName" --enable-soft-delete "false" --enabled-for-deployment "true" | Set-Content keyVault.json
-
-# set az kv default
-
-az configure --default kv=$kvName
 
 # KV: set secret
 
