@@ -7,7 +7,7 @@ set -ex
 export DEBIAN_FRONTEND=noninteractive
 HOME=/home/student
 
-# nginx
+# dir where nginx will look for the SSL cert and key
 nginx_ssl_dir=/etc/nginx/external
 
 # ssl 
@@ -39,7 +39,12 @@ openssl req -x509 -newkey rsa:4086 \
 
 # -- configure nginx --
 
-cat << EOF > /etc/nginx/nginx.conf
+nginx_conf=/etc/nginx/nginx.conf
+
+# save default conf as a backup
+mv "$nginx_conf" "${nginx_conf}.bak"
+
+cat << EOF > "$nginx_conf"
 events {}
 http {
   # proxy settings
@@ -98,3 +103,6 @@ http {
   }
 }
 EOF
+
+# reload nginx to use this new conf file
+nginx -s reload

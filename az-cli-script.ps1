@@ -56,7 +56,7 @@ az keyvault set-policy --name "$kvName" --object-id $vm.identity.systemAssignedI
 
 # VM setup-and-deploy script
 
-# az vm run-command invoke --command-id RunBashScript --scripts vm-setup-and-deploy.sh
+# az vm run-command invoke --command-id RunShellScript --scripts @configure-vm.sh @configure-ssl.sh @deliver-deploy.sh
 
 # finished print out IP address
 
