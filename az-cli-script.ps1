@@ -5,12 +5,12 @@
 # variables
 
 $studentName = "paul"
-$rgName = "$studentName-cli-deploy-rg"
-$vmName = "$studentName-cli-deploy-vm"
+$rgName = "$studentName-cli-scripting-rg"
+$vmName = "$studentName-cli-scripting-vm"
 $vmSize = "Standard_B2s"
 $vmImage = "$(az vm image list --query "[? contains(urn, 'Ubuntu')] | [0].urn")"
 $vmAdminUsername = "student"
-$kvName = "$studentName-cli-deploy-kv"
+$kvName = "$studentName-cli-scripting-kv"
 $kvSecretName = "ConnectionStrings--Default"
 $kvSecretValue = "server=localhost;port=3306;database=coding_events;user=coding_events;password=launchcode"
 
